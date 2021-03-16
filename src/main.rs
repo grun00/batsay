@@ -15,6 +15,9 @@ struct Options {
     #[structopt(short = "u", long = "uwu")]
     /// cringe
     uwu: bool,
+    #[structopt(short = "f", long = "file", parse(from_os_str))]
+    /// read a custom Bat file from a path
+    batfile: Option<std::path::PathBuf>,
 }
 
 fn main() {
@@ -40,18 +43,32 @@ fn main() {
         message.bright_yellow().underline().on_purple()
     );
     println!("                              /");
-    println!("_________________               _________________");
-    println!(" ~-.              \\  |\\___/|  /              .-~");
-    println!(
-        "     ~-.           \\ / {eye} {eye} \\ /           .-~",
-        eye = eye.magenta().bold()
-    );
-    println!("        >           \\   W  //           <");
-    println!("       /             /~---~\\             \\");
-    println!("      /_            |       |            _\\");
-    println!("         ~-.        |       |        .-~");
-    println!("            ;        \\     /        i");
-    println!("           /___      /\\   /\\      ___\\");
-    println!("                ~-. /  \\_/  \\ .-~");
-    println!("                   V         V")
+    println!("                             /");
+
+    match &options.batfile {
+        Some(path) => {
+            let bat_template =
+                std::fs::read_to_string(path).expect(&format!("Could not read file {:?}", path));
+
+            let bat_picture = bat_template.replace("{eye}", eye);
+
+            println!("{}", &bat_picture);
+        }
+        None => {
+            println!("_________________               _________________");
+            println!(" ~-.              \\  |\\___/|  /              .-~");
+            println!(
+                "     ~-.           \\ / {eye} {eye} \\ /           .-~",
+                eye = eye.magenta().bold()
+            );
+            println!("        >           \\   W  //           <");
+            println!("       /             /~---~\\             \\");
+            println!("      /_            |       |            _\\");
+            println!("         ~-.        |       |        .-~");
+            println!("            ;        \\     /        i");
+            println!("           /___      /\\   /\\      ___\\");
+            println!("                ~-. /  \\_/  \\ .-~");
+            println!("                   V         V")
+        }
+    }
 }
