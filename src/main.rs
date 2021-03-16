@@ -1,5 +1,7 @@
+extern crate colored;
 extern crate structopt;
 
+use colored::*;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
@@ -10,13 +12,20 @@ struct Options {
     #[structopt(short = "d", long = "dead")]
     /// the bat is only pretending to be dead, and is unharmed
     dead: bool,
+    #[structopt(short = "u", long = "uwu")]
+    /// cringe
+    uwu: bool,
 }
 
 fn main() {
     let options = Options::from_args();
     let message = options.message;
 
-    let eye = if options.dead { "x" } else { "o" };
+    let mut eye = if options.dead { "x" } else { "o" };
+
+    if options.uwu {
+        eye = "u";
+    }
 
     if message.to_lowercase() == "woof" {
         eprintln!("Bats don't bark!");
@@ -26,13 +35,16 @@ fn main() {
         eprintln!("Bats don't meow!");
     }
 
-    println!("                          {}", message);
+    println!(
+        "                          {}",
+        message.bright_yellow().underline().on_purple()
+    );
     println!("                              /");
     println!("_________________               _________________");
     println!(" ~-.              \\  |\\___/|  /              .-~");
     println!(
         "     ~-.           \\ / {eye} {eye} \\ /           .-~",
-        eye = eye
+        eye = eye.magenta().bold()
     );
     println!("        >           \\   W  //           <");
     println!("       /             /~---~\\             \\");
