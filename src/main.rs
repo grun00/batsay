@@ -2,6 +2,7 @@ extern crate colored;
 extern crate structopt;
 
 use colored::*;
+use std::io::{self, Read};
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
@@ -18,11 +19,20 @@ struct Options {
     #[structopt(short = "f", long = "file", parse(from_os_str))]
     /// read a custom Bat file from a path
     batfile: Option<std::path::PathBuf>,
+    #[structopt(short = "i", long = "stdin")]
+    /// read msg from STDIN
+    stdin: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let options = Options::from_args();
-    let message = options.message;
+    let mut message = String::new();
+
+    if options.stdin {
+        io::stdin().read_to_string(&mut message)?;
+    } else {
+        message = options.message;
+    }
 
     let mut eye = if options.dead { "x" } else { "o" };
 
