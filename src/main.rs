@@ -20,7 +20,7 @@ struct Options {
     batfile: Option<std::path::PathBuf>,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let options = Options::from_args();
     let message = options.message;
 
@@ -47,12 +47,12 @@ fn main() {
 
     match &options.batfile {
         Some(path) => {
-            let bat_template =
-                std::fs::read_to_string(path).expect(&format!("Could not read file {:?}", path));
+            let bat_template = std::fs::read_to_string(path)?;
 
             let bat_picture = bat_template.replace("{eye}", eye);
 
             println!("{}", &bat_picture);
+            Ok(())
         }
         None => {
             println!("_________________               _________________");
@@ -68,7 +68,8 @@ fn main() {
             println!("            ;        \\     /        i");
             println!("           /___      /\\   /\\      ___\\");
             println!("                ~-. /  \\_/  \\ .-~");
-            println!("                   V         V")
+            println!("                   V         V");
+            Ok(())
         }
     }
 }
