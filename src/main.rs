@@ -50,7 +50,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!(
         "                          {}",
-        message.bright_yellow().underline().on_purple()
+        message.bright_yellow().underline()
     );
     println!("                              /");
     println!("                             /");
